@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBCode Image Formatter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            margin: 10px 0;
+            padding: 10px;
+            font-family: monospace;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .copy-button {
+            background-color: #2196F3;
+        }
+        .copy-button:hover {
+            background-color: #1976D2;
+        }
+        .result {
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .output-container {
+            position: relative;
+        }
+        .button-container {
+            margin-top: 10px;
+        }
+        .success-message {
+            color: #4CAF50;
+            margin-left: 10px;
+            display: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>BBCode Image Formatter</h1>
+    <p>Paste your BBCode image links below (8 images):</p>
+    <textarea id="input" placeholder="Paste your BBCode here..."></textarea>
+    <button onclick="formatBBCode()">Format BBCode</button>
+    <div class="result">
+        <h2>Formatted Result:</h2>
+        <div class="output-container">
+            <textarea id="output" readonly></textarea>
+            <div class="button-container">
+                <button onclick="copyToClipboard()" class="copy-button">Copy to Clipboard</button>
+                <span id="copySuccess" class="success-message">Copied!</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function formatBBCode() {
+            const input = document.getElementById('input').value;
+            
+            // Split the input by spaces and filter out empty strings
+            const images = input.trim().split(' ').filter(img => img.length > 0);
+            
+            // Check if we have exactly 8 images
+            if (images.length !== 8) {
+                alert('Please provide exactly 8 image BBCodes');
+                return;
+            }
+
+            // Add [IMG=350] to each image code
+            const formattedImages = images.map(img => {
+                return img.replace('[IMG]', '[IMG=350]');
+            });
+
+            // Join with spaces and wrap with [center] tags
+            const output = '[center]' + formattedImages.join(' ') + '[/center]';
+            
+            // Set the formatted output
+            document.getElementById('output').value = output;
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            
+            // Show success message
+            const successMessage = document.getElementById('copySuccess');
+            successMessage.style.display = 'inline';
+            
+            // Hide success message after 2 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
