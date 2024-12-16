@@ -80,17 +80,11 @@
             const input = document.getElementById('input').value;
             
             // Split the input by spaces and filter out empty strings
-            const images = input.trim().split(' ').filter(img => img.length > 0);
+            const images = input.trim().split(/\n/).filter(img => img.length > 0);
             
-            // Check if we have exactly 8 images
-            if (images.length !== 8) {
-                alert('Please provide exactly 8 image BBCodes');
-                return;
-            }
-
             // Add [IMG=350] to each image code
             const formattedImages = images.map(img => {
-                return img.replace('[IMG]', '[IMG=350]');
+                return img.replace('[img]', '[img=350]');
             });
 
             // Join with spaces and wrap with [center] tags
