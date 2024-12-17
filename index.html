@@ -14,12 +14,12 @@
         }
         textarea {
             width: 100%;
-            min-height: 150px;
+            min-height: 100px;
             margin: 10px 0;
             padding: 10px;
             font-family: monospace;
         }
-        button {
+        #submit {
             background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
@@ -29,19 +29,38 @@
             font-size: 16px;
             margin-right: 10px;
         }
-        button:hover {
-            background-color: #45a049;
+        #reset {
+            background-color: #990000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
         }
         .copy-button {
             background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        #submit:hover {
+            background-color: #45a049;
         }
         .copy-button:hover {
             background-color: #1976D2;
         }
+        #reset:hover {
+            background-color: #670000;
+        }
         .result {
-            margin-top: 20px;
+            margin-top: 10px;
             background-color: white;
-            padding: 20px;
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
@@ -49,7 +68,7 @@
             position: relative;
         }
         .button-container {
-            margin-top: 10px;
+            margin-top: 3px;
         }
         .success-message {
             color: #4CAF50;
@@ -61,23 +80,26 @@
 </head>
 <body>
     <h1>BBCode Image Formatter</h1>
-    <p>Paste your BBCode image links below (8 images):</p>
-    <textarea id="input" placeholder="Paste your BBCode here..."></textarea>
-    <button onclick="formatBBCode()">Format BBCode</button>
+    <h2>PTScreens/Lensdump/ImgBB</h2>
+    <textarea id="input-ptscreens" placeholder="Choose 'Full Linked' and paste the BBCode here..."></textarea>
+    <button id="submit" onclick="formatBBCodePTScreens()">Submit</button>  <button id="reset" onclick="clearPTScreens()">Reset</button>
+    <h2>Imgbox</h2>
+    <textarea id="input-imgbox" placeholder="Switch to Full Size and paste the BBCode here..."></textarea>
+    <button id="submit" onclick="formatBBCodeImgbox()">Submit</button> <button id="reset" onclick="clearImgbox()">Reset</button>
     <div class="result">
         <h2>Formatted Result:</h2>
         <div class="output-container">
             <textarea id="output" readonly></textarea>
             <div class="button-container">
-                <button onclick="copyToClipboard()" class="copy-button">Copy to Clipboard</button>
-                <span id="copySuccess" class="success-message">Copied!</span>
+                <button onclick="copyToClipboard()" class="copy-button">Copy to Clipboard</button> <button id="reset" onclick="clearOutput()">Reset</button>
+                <span id="copySuccess" class="success-message">Copied!</span> 
             </div>
         </div>
     </div>
 
     <script>
-        function formatBBCode() {
-            const input = document.getElementById('input').value;
+        function formatBBCodePTScreens() {
+            const input = document.getElementById('input-ptscreens').value;
             
             // Split the input by spaces and filter out empty strings
             const images = input.trim().split(/\n/).filter(img => img.length > 0);
@@ -85,6 +107,24 @@
             // Add [IMG=350] to each image code
             const formattedImages = images.map(img => {
                 return img.replace('[img]', '[img=350]');
+            });
+
+            // Join with spaces and wrap with [center] tags
+            const output = '[center]' + formattedImages.join(' ') + '[/center]';
+            
+            // Set the formatted output
+            document.getElementById('output').value = output;
+        }
+
+        function formatBBCodeImgbox() {
+            const input = document.getElementById('input-imgbox').value;
+            
+            // Split the input by spaces and filter out empty strings
+            const images = input.trim().split(' ').filter(img => img.length > 0);
+            
+            // Add [IMG=350] to each image code
+            const formattedImages = images.map(img => {
+                return img.replace('[IMG]', '[IMG=350]');
             });
 
             // Join with spaces and wrap with [center] tags
@@ -107,6 +147,19 @@
             setTimeout(() => {
                 successMessage.style.display = 'none';
             }, 2000);
+        }
+
+        function clearPTScreens()  
+        {
+            document.getElementById('input-ptscreens').value = "";
+        }
+        function clearImgbox()  
+        {
+            document.getElementById('input-imgbox').value = "";
+        }
+        function clearOutput()  
+        {
+            document.getElementById('output').value = "";
         }
     </script>
 </body>
